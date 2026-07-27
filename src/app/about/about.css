@@ -1,0 +1,181 @@
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Segoe UI',sans-serif;
+}
+
+body{
+  background:#f5f5f5;
+}
+
+/* Navbar */
+
+.top-nav{
+  height:40px;
+  background:white;
+
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:50px;
+
+  font-size:12px;
+  font-weight:600;
+
+  box-shadow:0 2px 5px rgba(0,0,0,.08);
+}
+
+.top-nav a{
+  cursor:pointer;
+}
+
+/* Hero */
+
+.hero{
+  background:#156cf0;
+  color:white;
+
+  text-align:center;
+
+  padding:35px 20px;
+}
+
+.hero h1{
+  font-size:48px;
+  font-weight:700;
+}
+
+.hero p{
+  margin-top:8px;
+  opacity:.9;
+}
+
+/* Container */
+
+.container{
+  max-width:1100px;
+  margin:auto;
+  padding:40px 20px;
+}
+
+/* About */
+
+.about-section{
+  display:flex;
+  gap:40px;
+  align-items:center;
+
+  background:white;
+  padding:20px;
+
+  border-radius:10px;
+
+  box-shadow:0 4px 12px rgba(0,0,0,.08);
+}
+
+.about-image{
+  flex:1;
+}
+
+.about-image img{
+  width:100%;
+  border-radius:8px;
+}
+
+.about-content{
+  flex:1;
+}
+
+.about-content h2{
+  color:#156cf0;
+  margin-bottom:15px;
+}
+
+.about-content p{
+  color:#666;
+  line-height:1.7;
+}
+
+.about-content button{
+  margin-top:20px;
+
+  background:#156cf0;
+  color:white;
+
+  border:none;
+  padding:10px 18px;
+
+  border-radius:6px;
+
+  cursor:pointer;
+}
+
+/* Cards */
+
+.card{
+  margin-top:30px;
+
+  background:white;
+
+  padding:25px;
+
+  border-radius:10px;
+
+  box-shadow:0 4px 12px rgba(0,0,0,.08);
+}
+
+.card h3{
+  color:#156cf0;
+  margin-bottom:15px;
+}
+
+.card ul{
+  list-style:none;
+}
+
+.card li{
+  padding:12px;
+  border-bottom:1px solid #eee;
+}
+
+/* Goals */
+
+.goals{
+  margin-top:40px;
+  text-align:center;
+}
+
+.goals h2{
+  color:#156cf0;
+  margin-bottom:25px;
+}
+
+.goal-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:20px;
+}
+
+.goal-card{
+  background:white;
+  padding:30px;
+
+  border-radius:10px;
+
+  box-shadow:0 4px 12px rgba(0,0,0,.08);
+
+  transition:.3s;
+}
+
+.goal-card:hover{
+  transform:translateY(-5px);
+}
+
+.goal-card span{
+  font-size:40px;
+}
+
+.goal-card h4{
+  margin-top:10px;
+}
