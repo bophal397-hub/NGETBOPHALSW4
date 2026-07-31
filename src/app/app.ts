@@ -1,17 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
-import { Product } from './product/product';
-import { Category } from './category/category';
-import { About } from './about/about';
-import { Home } from './home/home';
-import { Contact } from './contact/contact'; 
-import { ListProduct } from './list-product/list-product';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, CommonModule, RouterLink, Product, Category, About, Home, Contact,ListProduct,RouterLinkActive],
+  imports: [RouterOutlet, CommonModule, RouterLink, RouterLinkActive],
   templateUrl: './app.html',
   styleUrls: ['./app.css']
 })
