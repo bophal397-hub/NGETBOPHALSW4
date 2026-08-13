@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { map, Observable, of, tap } from 'rxjs';
+import { catchError, map, Observable, of, tap, throwError } from 'rxjs';
 import { Product } from '../models/product';
 
 export type ProductInput = Omit<Product, 'id'> & { id?: number };
@@ -106,14 +106,60 @@ export class ProductService {
   }
 
   addProduct(product: ProductInput): Observable<Product> {
-    return this.http.post<Product>(`${this.baseUrl}/add`, product);
+    const optimisticProduct: Product = {
+      ...(product as Product),
+      id: product.id ?? Date.now(),
+    };
+
+    const previousCache = this.productsCache ? [...this.productsCache] : null;
+    this.productsCache = this.productsCache ? [optimisticProduct, ...this.productsCache] : [optimisticProduct];
+
+    return this.http.post<Product>(`${this.baseUrl}/add`, product).pipe(
+      tap((serverProduct) => {
+        this.productsCache = this.productsCache?.map((item) =>
+          String(item.id) === String(optimisticProduct.id) ? { ...item, ...serverProduct } : item
+        ) ?? [serverProduct];
+      }),
+      catchError((error) => {
+        this.productsCache = previousCache;
+        return throwError(() => error);
+      })
+    );
   }
 
   updateProduct(id: number | string, product: Partial<ProductInput>): Observable<Product> {
-    return this.http.put<Product>(`${this.baseUrl}/${id}`, product);
+    const previousCache = this.productsCache ? [...this.productsCache] : null;
+    const normalizedId = String(id);
+
+    this.productsCache = this.productsCache?.map((item) =>
+      String(item.id) === normalizedId ? { ...item, ...product } : item
+    ) ?? this.productsCache;
+
+    return this.http.put<Product>(`${this.baseUrl}/${id}`, product).pipe(
+      tap((serverProduct) => {
+        this.productsCache = this.productsCache?.map((item) =>
+          String(item.id) === normalizedId ? { ...item, ...serverProduct } : item
+        ) ?? [serverProduct];
+      }),
+      catchError((error) => {
+        this.productsCache = previousCache;
+        return throwError(() => error);
+      })
+    );
   }
 
   deleteProduct(id: number | string): Observable<{ isDeleted: boolean; id: number | string }> {
-    return this.http.delete<{ isDeleted: boolean; id: number | string }>(`${this.baseUrl}/${id}`);
+    const previousCache = this.productsCache ? [...this.productsCache] : null;
+    this.productsCache = this.productsCache?.filter((item) => String(item.id) !== String(id)) ?? [];
+
+    return this.http.delete<{ isDeleted: boolean; id: number | string }>(`${this.baseUrl}/${id}`).pipe(
+      tap(() => {
+        this.productsCache = this.productsCache?.filter((item) => String(item.id) !== String(id)) ?? [];
+      }),
+      catchError((error) => {
+        this.productsCache = previousCache;
+        return throwError(() => error);
+      })
+    );
   }
 }

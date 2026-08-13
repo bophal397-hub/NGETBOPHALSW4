@@ -128,9 +128,7 @@ export class AdminProductFormComponent {
       next: () => {
         this.submitting = false;
         this.successMessage = this.isEditMode ? 'Product updated successfully.' : 'Product added successfully.';
-        if (!this.isEditMode) {
-          this.form.reset();
-        }
+        this.router.navigate(['/admin/products']);
       },
       error: () => {
         this.submitting = false;
