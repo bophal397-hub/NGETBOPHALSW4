@@ -1,0 +1,12 @@
+.table-responsive {
+  border-radius: 1.25rem;
+}
+
+.table th,
+.table td {
+  vertical-align: middle;
+}
+
+.btn-group .btn {
+  border-radius: 0.6rem;
+}

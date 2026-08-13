@@ -1,61 +1,39 @@
-/* Page Background */
 body {
-    margin: 0;
-    font-family: Arial, Helvetica, sans-serif;
-    background: #f4f6f9;
+  margin: 0;
+  font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+  background: #f8f9fa;
+  color: #212529;
 }
 
-/* Main Title */
-h1 {
-    text-align: center;
-    background: linear-gradient(135deg, #007bff, #00c6ff);
-    color: white;
-    padding: 20px;
-    margin: 0;
-    box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+main {
+  min-height: 70vh;
 }
 
-/* Navigation Bar */
-nav {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    background-color: white;
-    padding: 15px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+.btn-success {
+  background-color: #198754;
+  border-color: #198754;
 }
 
-/* Navigation Links */
-nav a {
-    text-decoration: none;
-    color: #333;
-    font-weight: bold;
-    padding: 10px 20px;
-    border-radius: 25px;
-    transition: all 0.3s ease;
+.btn-success:hover {
+  background-color: #157347;
+  border-color: #157347;
 }
 
-/* Hover Effect */
-nav a:hover {
-    background-color: #007bff;
-    color: white;
-    transform: translateY(-2px);
+.text-success {
+  color: #198754 !important;
 }
 
-/* Active Link */
-nav a.active {
-    background-color: #007bff;
-    color: white;
+.navbar .navbar-brand,
+.navbar .nav-link {
+  color: #ffffff !important;
 }
 
-/* Router Content Area */
-router-outlet + * {
-    display: block;
-    margin: 30px auto;
-    width: 80%;
-    max-width: 900px;
-    background: white;
-    padding: 25px;
-    border-radius: 15px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+.navbar .nav-link.active,
+.navbar .nav-link:hover {
+  color: #d8f8e7 !important;
 }
+
+.bg-success-subtle {
+  background-color: #e8f7ef !important;
+}
+

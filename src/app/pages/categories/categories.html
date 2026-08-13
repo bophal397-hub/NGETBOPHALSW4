@@ -1,0 +1,23 @@
+<section class="container py-5">
+  <div class="text-center mb-5">
+    <h1 class="fw-bold">Shop by Category</h1>
+    <p class="text-muted">Discover curated collections across the most popular categories.</p>
+  </div>
+<div class="row g-4">
+
+  <div class="col-md-6 col-xl-4" *ngFor="let category of categories()">
+    <a class="text-decoration-none" [routerLink]="['/products']" [queryParams]="{ category: category.slug }">
+      <div class="category-card" [style.background-image]="'url(' + getCategoryImage(category.slug) + ')'">
+        <div class="category-overlay">
+          <span class="badge bg-success mb-3">Featured</span>
+          <h3 class="fw-bold text-capitalize">{{ category.name }}</h3>
+          <p class="mb-4">Explore our latest {{ category.name }} collection with quality products and great prices.</p>
+          <button class="btn btn-light rounded-pill px-4">Shop Now
+            <i class="bi bi-arrow-right ms-2"></i>
+          </button>
+        </div>
+      </div>
+    </a>
+  </div>
+</div>
+</section>

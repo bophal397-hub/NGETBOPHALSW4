@@ -1,0 +1,73 @@
+<nav class="navbar navbar-expand-lg sticky-top shadow-sm navbar-dark bg-success border-bottom">
+  <div class="container py-2">
+<a class="navbar-brand d-flex align-items-center fw-bold fs-4 text-white" routerLink="/">
+  <img
+    src="LOGO-SETEC.ico"
+    alt="SETEC Institute Market Logo"
+    class="navbar-logo me-2"
+  />
+  <span>SETEC INSTITUTE MARKET</span>
+</a>
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="d-flex flex-wrap align-items-center justify-content-between w-100" id="mainNavbar">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0 align-items-lg-center">
+        <li class="nav-item"><a class="nav-link fw-semibold" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">Home</a></li>
+        <li class="nav-item"><a class="nav-link fw-semibold" routerLink="/products" routerLinkActive="active">Products</a></li>
+        <li class="nav-item"><a class="nav-link fw-semibold" routerLink="/categories" routerLinkActive="active">Categories</a></li>
+        <li class="nav-item"><a class="nav-link fw-semibold" routerLink="/about" routerLinkActive="active">About</a></li>
+        <li class="nav-item"><a class="nav-link fw-semibold" routerLink="/contact" routerLinkActive="active">Contact</a></li>
+      </ul>
+
+      <form class="d-flex flex-grow-1 flex-lg-grow-0 mx-lg-3 my-2 my-lg-0 position-relative" (ngSubmit)="search()">
+        <div class="input-group">
+          <span class="input-group-text bg-light border-0"><i class="bi bi-search"></i></span>
+          <input class="form-control border-0 bg-light" type="search" placeholder="Search products" [(ngModel)]="searchTerm" name="search" (input)="search()" />
+        </div>
+        <ul class="list-group position-absolute top-100 start-0 w-100 mt-2 shadow" *ngIf="suggestions.length">
+          <li class="list-group-item list-group-item-action" *ngFor="let item of suggestions" [routerLink]="['/product', item.id]">
+            {{ item.title }}
+          </li>
+        </ul>
+      </form>
+
+      <ul class="navbar-nav align-items-lg-center">
+        <li class="nav-item">
+          <a class="nav-link position-relative" routerLink="/wishlist">
+            <i class="bi bi-heart fs-5"></i>
+            <span class="badge rounded-pill bg-success position-absolute top-0 start-100 translate-middle" *ngIf="wishlistCount()">{{ wishlistCount() }}</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link position-relative" routerLink="/cart">
+            <i class="bi bi-cart3 fs-5"></i>
+            <span class="badge rounded-pill bg-success position-absolute top-0 start-100 translate-middle" *ngIf="cartCount()">{{ cartCount() }}</span>
+          </a>
+        </li>
+
+        <li class="nav-item dropdown" *ngIf="isAuthenticated()">
+          <a class="nav-link dropdown-toggle d-flex align-items-center gap-2" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-person-circle fs-5"></i>
+            <span class="fw-semibold">Hi, {{ userDisplayName() }}</span>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+            <li><a class="dropdown-item" routerLink="/account/profile">My Account</a></li>
+            <li><a class="dropdown-item" routerLink="/account/change-password">Change Password</a></li>
+            <li *ngIf="isAdmin() === 'admin'"><a class="dropdown-item" routerLink="/admin/dashboard">Admin Panel</a></li>
+            <li><hr class="dropdown-divider" /></li>
+            <li><button class="dropdown-item text-danger" type="button" (click)="logout()">Logout</button></li>
+          </ul>
+        </li>
+
+        <li class="nav-item" *ngIf="!isAuthenticated()">
+          <a class="nav-link" routerLink="/login">Login</a>
+        </li>
+        <li class="nav-item" *ngIf="!isAuthenticated()">
+          <a class="btn btn-light text-success fw-semibold ms-lg-2" routerLink="/register">Register</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

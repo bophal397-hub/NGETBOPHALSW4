@@ -1,18 +1,5 @@
-<h1>Student Information System</h1>
-<nav class="nav-item">
-    <a routerLink="/" class="nav-link" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a> |
-    <a routerLink="/about" class="nav-link" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">About</a> |
-    <a routerLink="/contact" class="nav-link" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Contact</a> |
-    <a routerLink="/product" class="nav-link" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Product</a> |
-    <a routerLink="/tailwind" class="nav-link" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Tailwind</a> |
-    <a routerLink="/auth" class="nav-link" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Login & Register</a>
-</nav>
-
-
-<router-outlet /> <!-- Routed don't Delete this line you fool -->
-
-<!-- <app-product></app-product> 
-<app-category></app-category> -->
-<!-- <app-home></app-home>
-<app-about></app-about>
-<app-contact></app-contact> -->
+<app-navbar></app-navbar>
+<main class="bg-light">
+  <router-outlet />
+</main>
+<app-footer></app-footer>

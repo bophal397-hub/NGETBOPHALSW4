@@ -1,0 +1,38 @@
+<section>
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2 class="fw-bold mb-1">Settings</h2>
+      <p class="text-muted mb-0">Store controls and account security preferences.</p>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-lg-6" *ngFor="let section of sections">
+      <div class="card border-0 shadow-sm rounded-4 h-100">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <div>
+              <h5 class="fw-bold mb-1">{{ section.title }}</h5>
+              <p class="text-muted mb-0">{{ section.description }}</p>
+            </div>
+            <span class="badge text-bg-{{ section.tone }}-subtle text-{{ section.tone }} text-capitalize">{{ section.value }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card border-0 shadow-sm rounded-4 mt-4">
+    <div class="card-body">
+      <h5 class="fw-bold mb-3">Quick Preferences</h5>
+      <div class="d-flex flex-column gap-3">
+        <div class="d-flex justify-content-between align-items-center" *ngFor="let toggle of toggles">
+          <span>{{ toggle.label }}</span>
+          <div class="form-check form-switch mb-0">
+            <input class="form-check-input" type="checkbox" [checked]="toggle.enabled" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

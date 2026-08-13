@@ -1,0 +1,7 @@
+.table-responsive {
+  overflow-x: auto;
+}
+
+.btn-group .btn {
+  border-radius: 0.6rem;
+}

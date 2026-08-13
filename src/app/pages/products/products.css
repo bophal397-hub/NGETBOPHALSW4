@@ -1,0 +1,3 @@
+.sticky-top { z-index: 10; }
+.page-link { color: #198754; }
+.page-item.active .page-link { background-color: #198754; border-color: #198754; }

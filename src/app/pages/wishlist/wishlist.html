@@ -1,0 +1,37 @@
+<section class="container py-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h1 class="fw-bold mb-1">Wishlist</h1>
+      <p class="text-muted mb-0">Save your favorite products for later.</p>
+    </div>
+    <button class="btn btn-outline-danger" *ngIf="wishlistService.items().length" (click)="wishlistService.clear()">Clear Wishlist</button>
+  </div>
+
+  <div class="row g-4" *ngIf="wishlistService.items().length; else emptyWishlist">
+    <div class="col-md-6 col-lg-4" *ngFor="let product of wishlistService.items()">
+      <div class="card border-0 shadow-sm rounded-4 h-100 overflow-hidden">
+        <img [src]="product.thumbnail" [alt]="product.title" class="card-img-top wishlist-product-image" />
+        <div class="card-body d-flex flex-column">
+          <h5 class="fw-semibold">{{ product.title }}</h5>
+          <p class="text-muted small flex-grow-1">{{ product.description }}</p>
+          <div class="d-flex justify-content-between align-items-center">
+            <span class="fw-bold text-success">${{ product.price }}</span>
+            <div class="d-flex gap-2">
+              <button class="btn btn-success btn-sm" (click)="moveToCart(product)">Move to Cart</button>
+              <button class="btn btn-outline-danger btn-sm" (click)="wishlistService.remove(product.id)">Remove</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #emptyWishlist>
+    <div class="text-center py-5">
+      <i class="bi bi-heart fs-1 text-muted"></i>
+      <h4 class="mt-3">No favorites yet</h4>
+      <p class="text-muted">Save products you love and come back anytime.</p>
+      <a class="btn btn-success" routerLink="/products">Discover Products</a>
+    </div>
+  </ng-template>
+</section>
