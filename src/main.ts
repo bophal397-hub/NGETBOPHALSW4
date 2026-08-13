@@ -1,5 +1,6 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+// Use the ESM build of Bootstrap to avoid CommonJS optimization bailouts
+import 'bootstrap/dist/js/bootstrap.esm.min.js';
 import { appConfig } from './app/app.config';
 import { App } from './app/app';
 
