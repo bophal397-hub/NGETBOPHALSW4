@@ -1,13 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ProductInput, ProductService } from '../../services/product.service';
 
 @Component({
   selector: 'app-admin-product-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './admin-product-form.html',
   styleUrls: ['./admin-product-form.css'],
 })
@@ -18,6 +18,7 @@ export class AdminProductFormComponent {
   private readonly productService = inject(ProductService);
 
   readonly categoryOptions = signal<string[]>([]);
+  readonly thumbnailPreview = signal<string | null>(null);
 
   readonly form = this.fb.group({
     title: ['', Validators.required],
@@ -72,11 +73,26 @@ export class AdminProductFormComponent {
     });
   }
 
+  onThumbnailSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const result = reader.result as string;
+        this.thumbnailPreview.set(result);
+        this.form.patchValue({ thumbnail: result });
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
   private loadProduct(id: number): void {
     this.loading = true;
     this.productService.getProduct(id).subscribe({
       next: (product) => {
         this.loading = false;
+        this.thumbnailPreview.set(product.thumbnail);
         this.form.patchValue({
           title: product.title,
           description: product.description,

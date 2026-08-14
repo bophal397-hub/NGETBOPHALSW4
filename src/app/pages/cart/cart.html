@@ -34,7 +34,7 @@
         <div class="d-flex justify-content-between mb-2"><span>Items</span><span>{{ cartService.count() }}</span></div>
         <div class="d-flex justify-content-between mb-2"><span>Subtotal</span><span>${{ cartService.total() }}</span></div>
         <div class="d-flex justify-content-between fw-bold fs-5 mt-3"><span>Total</span><span>${{ cartService.total() }}</span></div>
-        <button class="btn btn-success w-100 mt-4">Proceed to Checkout</button>
+        <button class="btn btn-success w-100 mt-4" (click)="openPaymentModal()">Proceed to Checkout</button>
       </div>
     </div>
   </div>
@@ -47,4 +47,39 @@
       <a class="btn btn-success" routerLink="/products">Browse Products</a>
     </div>
   </ng-template>
+
+  <!-- Payment Method Modal -->
+  <div class="modal fade" [class.show]="showPaymentModal()" [style.display]="showPaymentModal() ? 'block' : 'none'" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header border-bottom">
+          <h5 class="modal-title">Select Payment Method</h5>
+          <button type="button" class="btn-close" (click)="closePaymentModal()"></button>
+        </div>
+        <div class="modal-body">
+          <div class="payment-options d-flex flex-column gap-2">
+            <div *ngFor="let method of paymentMethods" class="form-check payment-option p-3 border rounded-3" [class.border-success]="selectedPaymentMethod() === method.id">
+              <input class="form-check-input" type="radio" [id]="method.id" [value]="method.id" [(ngModel)]="selectedPaymentMethod" />
+              <label class="form-check-label w-100" [for]="method.id">
+                <div class="d-flex align-items-center gap-3 cursor-pointer">
+                  <i class="bi" [class]="method.icon + ' fs-5 text-success'"></i>
+                  <div class="flex-grow-1">
+                    <div class="fw-semibold">{{ method.name }}</div>
+                    <small class="text-muted">{{ method.description }}</small>
+                  </div>
+                </div>
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer border-top">
+          <button type="button" class="btn btn-secondary" (click)="closePaymentModal()">Cancel</button>
+          <button type="button" class="btn btn-success" (click)="proceedToCheckout()">Continue</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Backdrop -->
+  <div class="modal-backdrop fade" [class.show]="showPaymentModal()" *ngIf="showPaymentModal()" (click)="closePaymentModal()"></div>
 </section>

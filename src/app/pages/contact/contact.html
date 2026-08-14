@@ -3,24 +3,38 @@
     <div class="col-lg-6">
       <h1 class="fw-bold mb-3">Contact Us</h1>
       <p class="text-muted">We would love to hear from you. Send us a message and our team will respond quickly.</p>
-      <form [formGroup]="contactForm" (ngSubmit)="submit()" class="card border-0 shadow-sm rounded-4 p-4">
+      <form [formGroup]="contactForm" (ngSubmit)="submit()" class="card border-0 shadow-sm rounded-4 p-4" novalidate>
+        <div *ngIf="successMessage()" class="alert alert-success mb-3">
+          {{ successMessage() }}
+        </div>
+        <div *ngIf="errorMessage()" class="alert alert-danger mb-3">
+          {{ errorMessage() }}
+        </div>
+
         <div class="mb-3">
           <label class="form-label">Name</label>
-          <input class="form-control" formControlName="name" />
+          <input class="form-control" formControlName="name" [class.is-invalid]="submitted() && contactForm.get('name')?.invalid" />
+          <small class="text-danger" *ngIf="submitted() && contactForm.get('name')?.invalid">Name is required</small>
         </div>
         <div class="mb-3">
           <label class="form-label">Email</label>
-          <input class="form-control" formControlName="email" />
+          <input class="form-control" type="email" formControlName="email" [class.is-invalid]="submitted() && contactForm.get('email')?.invalid" />
+          <small class="text-danger" *ngIf="submitted() && contactForm.get('email')?.invalid">Valid email is required</small>
         </div>
         <div class="mb-3">
           <label class="form-label">Subject</label>
-          <input class="form-control" formControlName="subject" />
+          <input class="form-control" formControlName="subject" [class.is-invalid]="submitted() && contactForm.get('subject')?.invalid" />
+          <small class="text-danger" *ngIf="submitted() && contactForm.get('subject')?.invalid">Subject is required</small>
         </div>
         <div class="mb-3">
           <label class="form-label">Message</label>
-          <textarea class="form-control" rows="4" formControlName="message"></textarea>
+          <textarea class="form-control" rows="4" formControlName="message" [class.is-invalid]="submitted() && contactForm.get('message')?.invalid"></textarea>
+          <small class="text-danger" *ngIf="submitted() && contactForm.get('message')?.invalid">Message is required</small>
         </div>
-        <button class="btn btn-success" type="submit">Send Message</button>
+        <button class="btn btn-success" type="submit" [disabled]="submitting()">
+          <span *ngIf="submitting()" class="spinner-border spinner-border-sm me-2"></span>
+          {{ submitting() ? 'Sending...' : 'Send Message' }}
+        </button>
       </form>
     </div>
     <div class="col-lg-6">

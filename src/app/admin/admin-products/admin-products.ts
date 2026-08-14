@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { NavigationEnd, Router, RouterLink } from '@angular/router';
+import { filter } from 'rxjs';
 import { Product } from '../../models/product';
 import { ProductService } from '../../services/product.service';
 
@@ -76,6 +77,12 @@ export class AdminProductsComponent {
 
   constructor() {
     this.loadProducts();
+
+    this.router.events
+      .pipe(filter((event) => event instanceof NavigationEnd && event.url === '/admin/products'))
+      .subscribe(() => {
+        this.loadProducts();
+      });
   }
 
   private loadProducts(): void {

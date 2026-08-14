@@ -34,12 +34,16 @@ export class AdminUsersComponent {
   }
 
   toggleStatus(user: User): void {
-    const action = user.isActive ? this.userService.deactivateUser(user.id) : this.userService.activateUser(user.id);
+    const wasActive = user.isActive;
+    user.isActive = !user.isActive;
+    
+    const action = wasActive ? this.userService.deactivateUser(user.id) : this.userService.activateUser(user.id);
     action.subscribe({
       next: () => {
-        user.isActive = !user.isActive;
+        user.isActive = !wasActive;
       },
       error: () => {
+        user.isActive = wasActive;
         alert('Unable to update user status.');
       },
     });

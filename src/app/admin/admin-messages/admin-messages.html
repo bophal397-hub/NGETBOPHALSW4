@@ -4,14 +4,35 @@
       <h2 class="fw-bold mb-1">Messages</h2>
       <p class="text-muted mb-0">Customer support and inquiry center.</p>
     </div>
+    <div class="badge bg-warning" *ngIf="unreadCount() > 0">{{ unreadCount() }} Unread</div>
   </div>
 
-  <div *ngIf="loading" class="text-center py-5">
+  <div *ngIf="loading()" class="text-center py-5">
     <div class="spinner-border text-success"></div>
   </div>
 
-  <div *ngIf="!loading" class="card border-0 shadow-sm rounded-4 overflow-hidden">
-    <div class="table-responsive">
+  <div *ngIf="!loading()" class="card border-0 shadow-sm rounded-4 overflow-hidden">
+    <div class="card-body border-bottom">
+      <div class="row g-3">
+        <div class="col-md-6">
+          <input type="text" class="form-control" placeholder="Search by name, email, or subject..." [(ngModel)]="searchTerm" />
+        </div>
+        <div class="col-md-6">
+          <select class="form-select" [(ngModel)]="statusFilter">
+            <option value="all">All Messages</option>
+            <option value="unread">Unread</option>
+            <option value="read">Read</option>
+            <option value="replied">Replied</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="filteredMessages().length === 0" class="text-center py-5">
+      <p class="text-muted">No messages found.</p>
+    </div>
+
+    <div *ngIf="filteredMessages().length > 0" class="table-responsive">
       <table class="table align-middle mb-0">
         <thead class="table-light">
           <tr>
@@ -23,13 +44,13 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let message of messages">
-            <td>
+          <tr *ngFor="let message of filteredMessages()" [class.table-light]="message.status === 'unread'" style="cursor: pointer;">
+            <td (click)="openMessage(message)">
               <div class="fw-semibold">{{ message.name }}</div>
               <small class="text-muted">{{ message.email }}</small>
             </td>
-            <td>{{ message.subject }}</td>
-            <td>{{ message.createdAt | date: 'mediumDate' }}</td>
+            <td (click)="openMessage(message)" class="fw-semibold">{{ message.subject }}</td>
+            <td (click)="openMessage(message)">{{ message.createdAt | date: 'mediumDate' }}</td>
             <td>
               <span class="badge" [class.bg-warning]="message.status === 'unread'" [class.bg-secondary]="message.status === 'read'" [class.bg-success]="message.status === 'replied'">
                 {{ message.status }}
@@ -37,8 +58,8 @@
             </td>
             <td>
               <div class="btn-group btn-group-sm">
-                <button class="btn btn-outline-secondary" type="button" (click)="markRead(message)">Mark Read</button>
-                <button class="btn btn-outline-danger" type="button" (click)="deleteMessage(message.id)">Delete</button>
+                <button class="btn btn-outline-secondary" type="button" (click)="openMessage(message)" title="View message">View</button>
+                <button class="btn btn-outline-danger" type="button" (click)="deleteMessage(message.id)" title="Delete message">Delete</button>
               </div>
             </td>
           </tr>
@@ -46,4 +67,65 @@
       </table>
     </div>
   </div>
+
+  <div class="modal fade" [class.show]="selectedMessage() !== null" [style.display]="selectedMessage() !== null ? 'block' : 'none'" role="dialog">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header border-bottom">
+          <div>
+            <h5 class="modal-title">{{ selectedMessage()?.subject }}</h5>
+            <small class="text-muted">From: {{ selectedMessage()?.email }}</small>
+          </div>
+          <button type="button" class="btn-close" (click)="closeMessage()"></button>
+        </div>
+        <div class="modal-body" style="max-height: 60vh; overflow-y: auto;">
+          <div class="mb-4">
+            <label class="form-label fw-semibold">Customer Message</label>
+            <div class="p-3 bg-light rounded border">
+              <p class="text-break mb-0">{{ selectedMessage()?.message }}</p>
+            </div>
+            <div class="row mt-2 text-muted small">
+              <div class="col-6">
+                <strong>From:</strong> {{ selectedMessage()?.name }}
+              </div>
+              <div class="col-6 text-end">
+                <strong>Date:</strong> {{ selectedMessage()?.createdAt | date: 'medium' }}
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="selectedMessage()?.reply" class="mb-4">
+            <label class="form-label fw-semibold">Your Reply</label>
+            <div class="p-3 bg-success bg-opacity-10 rounded border border-success">
+              <p class="text-break mb-0">{{ selectedMessage()?.reply }}</p>
+            </div>
+            <small class="text-muted">Replied: {{ selectedMessage()?.repliedAt | date: 'medium' }}</small>
+          </div>
+
+          <div *ngIf="!replyingTo() && !selectedMessage()?.reply">
+            <button type="button" class="btn btn-sm btn-primary" (click)="startReply(selectedMessage()?.id ?? '')">
+              <i class="bi bi-reply"></i> Send Reply
+            </button>
+          </div>
+
+          <div *ngIf="replyingTo() === selectedMessage()?.id" class="mt-4">
+            <label class="form-label">Your Reply</label>
+            <textarea class="form-control" rows="4" [(ngModel)]="replyText" placeholder="Type your reply here..."></textarea>
+            <div class="mt-2 d-flex gap-2">
+              <button type="button" class="btn btn-primary btn-sm" (click)="sendReply(selectedMessage()?.id ?? '')" [disabled]="!replyText().trim()">
+                Send Reply
+              </button>
+              <button type="button" class="btn btn-secondary btn-sm" (click)="cancelReply()">Cancel</button>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer border-top">
+          <button type="button" class="btn btn-secondary" (click)="closeMessage()" [disabled]="replyingTo() === selectedMessage()?.id">Close</button>
+          <button type="button" class="btn btn-danger" (click)="deleteMessage(selectedMessage()?.id ?? ''); closeMessage();" [disabled]="replyingTo() === selectedMessage()?.id">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop fade" [class.show]="selectedMessage() !== null" *ngIf="selectedMessage() !== null" (click)="closeMessage()"></div>
 </section>

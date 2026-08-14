@@ -1,2 +1,28 @@
 .card { transition: box-shadow 0.2s ease; }
 .card:hover { box-shadow: 0 0.8rem 1.4rem rgba(0,0,0,0.08) !important; }
+
+.payment-option {
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 2px solid #e9ecef !important;
+}
+
+.payment-option:hover {
+  border-color: #28a745 !important;
+  background-color: rgba(40, 167, 69, 0.02);
+}
+
+.payment-option.border-success {
+  border-color: #28a745 !important;
+  background-color: rgba(40, 167, 69, 0.05);
+}
+
+.payment-option .form-check-input {
+  cursor: pointer;
+}
+
+.payment-option label {
+  cursor: pointer;
+  margin-bottom: 0;
+}
+

@@ -106,18 +106,31 @@ export class ProductService {
   }
 
   addProduct(product: ProductInput): Observable<Product> {
+    const optimisticId = product.id ?? Date.now();
     const optimisticProduct: Product = {
-      ...(product as Product),
-      id: product.id ?? Date.now(),
+      id: optimisticId,
+      title: product.title,
+      description: product.description,
+      price: product.price,
+      discountPercentage: product.discountPercentage,
+      rating: product.rating,
+      stock: product.stock,
+      brand: product.brand,
+      category: product.category,
+      thumbnail: product.thumbnail,
+      images: product.images,
     };
 
     const previousCache = this.productsCache ? [...this.productsCache] : null;
-    this.productsCache = this.productsCache ? [optimisticProduct, ...this.productsCache] : [optimisticProduct];
+    if (!this.productsCache) {
+      this.productsCache = [];
+    }
+    this.productsCache = [optimisticProduct, ...this.productsCache];
 
     return this.http.post<Product>(`${this.baseUrl}/add`, product).pipe(
       tap((serverProduct) => {
         this.productsCache = this.productsCache?.map((item) =>
-          String(item.id) === String(optimisticProduct.id) ? { ...item, ...serverProduct } : item
+          String(item.id) === String(optimisticId) ? { ...item, ...serverProduct } : item
         ) ?? [serverProduct];
       }),
       catchError((error) => {
